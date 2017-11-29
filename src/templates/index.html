@@ -1,0 +1,25 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<h1>Photo Uploader</h1>
+<form id="form-upload" action="{{ url_for('index') }}" method="POST" enctype="multipart/form-data">
+  <input type="file" name="photo" multiple>
+  <input type="submit" value="Upload">
+</form>
+</body>
+</html>
