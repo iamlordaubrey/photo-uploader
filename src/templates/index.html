@@ -16,10 +16,10 @@
     </ul>
   {% endif %}
 {% endwith %}
-<h1>Photo Uploader</h1>
-<form id="form-upload" action="{{ url_for('index') }}" method="POST" enctype="multipart/form-data">
-  <input type="file" name="photo" accept="image/*">
-  <input type="submit" value="Upload">
-</form>
+<h1>Image Uploader</h1>
+  <form id="form-upload" action="{{ url_for('index') }}" method="POST" enctype="multipart/form-data">
+    <input type="file" name="photo" accept="image/*">
+    <input type="submit" value="Upload">
+  </form>
 </body>
 </html>
