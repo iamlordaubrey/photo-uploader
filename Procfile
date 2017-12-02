@@ -1,1 +1,1 @@
-web: gunicorn mage_uploader.app:app --log-file -
+web: gunicorn image_uploader.app:app --log-file -
