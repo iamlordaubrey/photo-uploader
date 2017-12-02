@@ -1,6 +1,6 @@
 import cgi
 import unittest
-import app
+from image_uploader import app
 from io import BytesIO
 
 from io import StringIO
