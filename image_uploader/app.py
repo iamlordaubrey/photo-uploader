@@ -1,10 +1,9 @@
 from io import BytesIO
-from flask import Flask, request, flash, redirect, render_template, send_file
+from flask import Flask, request, flash, redirect, render_template, send_file, make_response
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
-# app.config['SERVER_NAME'] = '127.0.0.1:5000'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Should be secret
@@ -24,14 +23,14 @@ def allowed_file(filename):
 def index():
     if request.method == 'POST':
         if 'photo' not in request.files:
-            print('no file was uploaded')
+            print('File part absent')
             flash('No file part')
             return redirect(request.url), 400
 
         file = request.files['photo']
 
         if file.filename == '':
-            print('blank filename')
+            print('Blank filename')
             flash('No selected file')
             return redirect(request.url), 400
 
@@ -44,14 +43,16 @@ def index():
             # Head back to the beginning of the file
             file_obj.seek(0)
 
-            return send_file(
-                file_obj,
-                as_attachment=True,
-                attachment_filename=file.filename,
-                mimetype=file.content_type
-            ), 201
-
+            response = make_response(
+                send_file(
+                    file_obj,
+                    mimetype=file.content_type
+                ), 201
+            )
+            response.headers['X-Filename'] = file.filename
+            return response
         else:
+            print('File format invalid')
             flash('Invalid file format')
             return redirect(request.url), 400
 
