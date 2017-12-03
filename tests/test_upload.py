@@ -6,7 +6,7 @@ from flask import url_for, Request
 from werkzeug.datastructures import FileStorage, MultiDict
 
 
-# Mock FileStorage.
+# Mock FileStorage
 # Gotten from: https://github.com/srusskih/flask-uploads/blob/master/flaskext/uploads.py with some modifications
 class TestingFileStorage(FileStorage):
     """
