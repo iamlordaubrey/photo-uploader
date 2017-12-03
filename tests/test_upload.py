@@ -1,10 +1,8 @@
-import cgi
 import unittest
 from image_uploader import app
 from io import BytesIO
 
-from io import StringIO
-from flask import url_for, Request, json
+from flask import url_for, Request
 from werkzeug.datastructures import FileStorage, MultiDict
 
 
@@ -93,41 +91,10 @@ class FlaskAppUploadFileTestCase(unittest.TestCase):
 
                 self.assertEqual(rv.status_code, status_code)
 
-    def test_filename(self):
-        class TestingRequest(Request):
-            """A testing request to use that will return a
-            TestingFileStorage to test the uploading."""
+                rv_filename = rv.headers.get('X-Filename')
 
-            @property
-            def files(self):
-                d = MultiDict()
-                d['photo'] = TestingFileStorage(filename=filename)
-                return d
-
-        # Loop over some files and the status codes that we are expecting
-        for filename, status_code in \
-                (('foo.png', 201), ('foo.jpg', 201),
-                 ('foo.jpeg', 201), ('foo.gif', 201)):
-
-            # Tell flask app to use our custom Request
-            self.app.request_class = TestingRequest
-
-            test_client = self.app.test_client()
-
-            # We need to work within the request context
-            with self.app.test_request_context():
-                rv = test_client.post(
-                    url_for('index'),
-                    data=dict(
-                        file=(BytesIO(), filename),
-                    ),
-                    content_type='multipart/form-data'
-                )
-
-                rv_filename = rv.headers.get('Content-Disposition')
-
-                value, params = cgi.parse_header(rv_filename)
-                self.assertEqual(params['filename'], filename)
+                if rv_filename:
+                    self.assertEqual(rv_filename, filename)
 
 
 if __name__  == '__main__':
