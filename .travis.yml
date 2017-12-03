@@ -7,4 +7,3 @@ script: python -m pytest
 branches:
   only:
     - master
-    - develop
